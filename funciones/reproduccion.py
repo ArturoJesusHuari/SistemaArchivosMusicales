@@ -1,4 +1,5 @@
 import pygame
+from pygame import mixer
 import os
 import sys
 from time import sleep
@@ -11,8 +12,7 @@ class SAM:
         self.bands = dict(enumerate(os.listdir(os.getcwd()+'/songs/'),start=1))
     def clear(self):
         if(os.name =='nt'):
-            pass
-            #system('cls')
+            system('cls')
         elif(os.name =='posix'):
             system('clear')
     def playSound(self,sound_file):
