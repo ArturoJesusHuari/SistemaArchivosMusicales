@@ -1,21 +1,20 @@
 import pytube
-from pytube import YouTube
 import config as cfg
+import os
 from os import system
 import pathlib
-from moviepy.editor import *
 from colorama import Fore
+import pytube as pt
 def Direction(autor):
     return str(pathlib.Path(__file__).parent.absolute()).replace('funciones','songs')+'/'+autor+'/'
-def YT(link):
-    return YouTube(str(link))
 def Download(link):
-    yt = YT(link)
     try:
-        Descarga = yt.streams.get_audio_only().download(Direction(yt.author))
-        audioclip = AudioFileClip(Descarga)
-        audioclip.write_audiofile(formatAudioClip(audioclip.filename))
-        os.remove(audioclip.filename)
+        yt = pt.YouTube(link)
+        video = yt.streams.filter(only_audio=True).first()
+        out_file = video.download(Direction(yt.author))
+        base, ext = os.path.splitext(out_file)
+        new_file = base + '.mp3'
+        os.rename(out_file, new_file)
     except pytube.exceptions.VideoUnavailable:
         pass
 def formatAudioClip(string):
@@ -25,7 +24,7 @@ def formatAudioClip(string):
                 ,'Letra','Music','4K','Sub.','Sub'
                 ,'Remaster','[',']','HD','Visualizer',
                 'Lyric','Remix','Version','Audio',
-                'Live','On','MTV','Unplugged','Unedited',
+                'On','MTV','Unplugged','Unedited',
                 'Edit','edit','|','Alternate','-']
     for word in listWords:
         string = string.replace(word,'')

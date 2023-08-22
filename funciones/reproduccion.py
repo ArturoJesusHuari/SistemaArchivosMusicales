@@ -11,7 +11,8 @@ class SAM:
         self.bands = dict(enumerate(os.listdir(os.getcwd()+'/songs/'),start=1))
     def clear(self):
         if(os.name =='nt'):
-            system('cls')
+            pass
+            #system('cls')
         elif(os.name =='posix'):
             system('clear')
     def playSound(self,sound_file):
@@ -26,20 +27,19 @@ class SAM:
     def quitPygame(self):
         pygame.mixer.quit()
     def home(self):
-        print('SAM')
         self.viewBands()
         inp = input('>>')
         if(inp == 'exit'):
             self.quitPygame()
-            exit()
-        try:
-            inp = int(inp)
-            self.selectionBand(inp)
-        except:
-            Download(inp)
-            self.home()
+        else:
+            try:
+                self.selectionBand(int(inp))
+            except:
+                Download(inp)
+                self.home()
     def viewBands(self):
         self.clear()
+        print('SAM')
         self.__init__()
         for key in self.bands:
             print(key,self.bands[key])
@@ -56,9 +56,10 @@ class SAM:
             print(key,songs[key].replace('.mp3',''))
         self.selectionSong(band,songs)
     def selectionSong(self,band,songs):
-        selection = input('>> ')
+        selection = input('--')
         if(selection=='back'):
             self.selectionBand()
+        print(os.getcwd()+'/songs/'+band+'/'+songs[int(selection)])
         try:
             self.playSound(os.getcwd()+'/songs/'+band+'/'+songs[int(selection)])
             self.control(songs[int(selection)])
